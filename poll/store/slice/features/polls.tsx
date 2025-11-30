@@ -3,21 +3,43 @@ import { PollProps } from "@/interface";
 
 const initialState: PollProps[] = [
     {
-        title: "Who is the best programming language?",
-        createdAt: "Jan 12, 2024",
-        options: ["JavaScript", "Python", "Java", "C#"],
-        id: "1",
-        votes: 12450,
-        status: "Active"
+      "title": "Who is the best programming language?",
+      "description": "",
+      "options": [
+        "JavaScript",
+        "Python",
+        "Java",
+        "C#"
+      ],
+      "votes": {
+        "JavaScript": 50001,
+        "Python": 4000,
+        "Java": 2502,
+        "C#": 950
+      },
+      "status": "Active",
+      "privacy": "Public",
+      "createdAt": "Jan 12, 2024",
+      "id": "1"
     },
     {
-        title: "Best frontend framework in 2024?",
-        createdAt: "Feb 02, 2024",
-        options: ["React", "Vue", "Angular", "Svelte"],
-        id: "2",
-        votes: 8230,
-        status: "Pending"
-    },
+      "title": "Best frontend framework in 2024?",
+      "description": "Hello",
+      "options": [
+        "React",
+        "Vue",
+        "Angular"
+      ],
+      "votes": {
+        "React": 4001,
+        "Vue": 3001,
+        "Angular": 1234
+      },
+      "status": "Active",
+      "privacy": "Public",
+      "createdAt": "Feb 02, 2024",
+      "id": "2"
+    }
 ];
 
 
@@ -31,7 +53,7 @@ const pollsSlice = createSlice({
       return action.payload;
     },
     addPoll(state, action: PayloadAction<PollProps>) {
-      state.unshift(action.payload); // put newest first
+      state.unshift(action.payload);
     },
     updatePoll(state, action: PayloadAction<PollProps>) {
       const idx = state.findIndex((p) => p.id === action.payload.id);

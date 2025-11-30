@@ -12,7 +12,7 @@
       "votes": {
         "JavaScript": 50001,
         "Python": 4000,
-        "Java": 2501,
+        "Java": 2502,
         "C#": 950
       },
       "status": "Active",
@@ -40,51 +40,43 @@
     },
     {
       "title": "Preferred mobile OS?",
+      "description": "",
       "options": [
         "iOS",
         "Android",
         "Windows Phone"
       ],
-      "status": "Pending",
-      "id": "3",
       "votes": {
         "iOS": 2500,
         "Android": 3700,
         "Windows Phone": 300
       },
-      "createdAt": "Mar 15, 2024"
+      "status": "Closed",
+      "privacy": "Public",
+      "createdAt": "Mar 15, 2024",
+      "id": "3"
     },
     {
-      "title": "Which is the best OS for Cyber Security?",
-      "options": {
-        "0": "Microsoft Windows",
-        "1": "Linux",
-        "2": "Mac OS"
-      },
-      "status": "Active",
-      "id": "deb9",
-      "votes": {
-        "Microsoft Windows": 600,
-        "Linux": 1,
-        "Mac OS": 3
-      },
-      "createdAt": "2025-11-26T00:16:21.424Z"
-    },
-    {
-      "title": "Is ALX the best at progamming?",
+      "title": "Is ALX programming worth it?",
       "description": "",
       "options": [
-        "True",
-        "False"
+        "Yes",
+        "No",
+        "None of above",
+        "I do not Know"
       ],
       "votes": {
-        "True": 1,
-        "False": 0
+        "Yes": 21,
+        "No": 5,
+        "None of above": 4,
+        "I do not Know": 4
       },
       "status": "Active",
       "privacy": "Public",
       "createdAt": "",
-      "id": "c6ac"
+      "startAt": "2025-11-30T10:42",
+      "endAt": "2025-12-01T10:42",
+      "id": "6d5a"
     }
   ]
 }
