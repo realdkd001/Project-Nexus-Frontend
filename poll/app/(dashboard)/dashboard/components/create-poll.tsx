@@ -5,7 +5,7 @@ import axios, { AxiosResponse } from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { addPoll, updatePoll } from "@/store/slice/features/polls";
 import { PollProps, FormStateProps, VotesMap, PollModalProps } from "@/interface";
-import { AnswerOptions, FormActions, FormHeader, PollDetails, Privacy, StatusSelect } from "./form-inputs";
+import { AnswerOptions, FormActions, FormHeader, PollDetails, PollSettings } from "./form-inputs";
 
 
 const EMPTY_FORM: FormStateProps = {
@@ -164,44 +164,8 @@ export default function PollModal({ isOpen, closeModal, mode = "create", initial
 
 
                     {/* Settings */}
-                    <section className="p-4 border rounded-lg bg-white dark:bg-gray-800">
-                      <h3 className="text-lg font-semibold mb-3">Settings</h3>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                        <label className="flex flex-col">
-                          <span className="text-sm font-medium">Start Date/Time</span>
-                          <input
-                            type="datetime-local"
-                            value={form.startAt ?? ""}
-                            onChange={(e) =>
-                              updateField("startAt", e.target.value ? e.target.value : null)
-                            }
-                            className="h-12 rounded-lg border p-3 bg-white dark:bg-gray-700"
-                          />
-                        </label>
-
-                        <label className="flex flex-col">
-                          <span className="text-sm font-medium">End Date/Time</span>
-                          <input
-                            type="datetime-local"
-                            value={form.endAt ?? ""}
-                            onChange={(e) =>
-                              updateField("endAt", e.target.value ? e.target.value : null)
-                            }
-                            className="h-12 rounded-lg border p-3 bg-white dark:bg-gray-700"
-                          />
-                        </label>
-                      </div>
-
-                      <div className="flex flex-col gap-4">
-                        {/* Privacy */}
-                        <Privacy form={form} updateField={updateField} />
-
-                        {/* Status select */}
-                        <StatusSelect form={form} updateField={updateField} />
-                      </div>
-                    </section>
-
+                    <PollSettings form={form} updateField={updateField} />
+                    
                     {/* Actions */}
                     <FormActions submitting={submitting} closeModal={closeModal} mode={mode} />
 
