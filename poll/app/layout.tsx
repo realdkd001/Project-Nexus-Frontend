@@ -24,7 +24,7 @@ export default function RootLayout({
         className={`${inter.variable} h-auto bg-background-light text-inter antialiased`}
       >
         <Providers>
-          <main className="flex-1 p-8 flex flex-col gap-6">
+          <main className="">
             {children}
           </main>  
         </Providers>
