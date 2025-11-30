@@ -1,36 +1,67 @@
-"use client"
-import { FiCheckCircle } from "react-icons/fi";
-import { FiShare2 } from "react-icons/fi";
+"use client";
+import { FiCheckCircle, FiShare2 } from "react-icons/fi";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PollProps } from "@/interface";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
-
-function VoteWrapper({ data }: {data: PollProps}) {
-   const [selected, setSelected] = useState<string | null>(null);
+function VoteWrapper({
+  election_id,
+  data,
+}: {
+  election_id: string;
+  data: PollProps | null;
+}) {
+  const [selected, setSelected] = useState<string | null>(null);
   const [showToast, setShowToast] = useState(false);
+  const polls = useSelector((s: RootState) => s.polls);
+
+  
+    if (!data) {
+      const foundPoll = polls.find((p) => p.id === election_id);
+      if (!foundPoll) return null;
+      data = foundPoll;
+    }
+  
+
+  if (
+    !data ||
+    (Array.isArray(data) && data.length === 0) ||
+    data.id === undefined ||
+    data.status !== "Active"
+  ) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center text-gray-500">
+        Election not found...
+      </div>
+    );
+  }
 
   const handleVote = async () => {
     if (!selected) return;
+
     const poll = await axios.get(`http://localhost:4000/polls/${data.id}`);
-    let updateVote = poll.data.votes ? Number(poll.data.votes[selected]) + 1 : 1;
-    if (isNaN(updateVote)) updateVote = 1;
+
+    const updatedVotes = poll.data.votes || {};
+    const updateValue = Number(updatedVotes[selected]) + 1 || 1;
+
     await axios.patch(`http://localhost:4000/polls/${data.id}`, {
-        votes: {
-            ...poll.data.votes,
-          [selected]: updateVote
-        }
+      votes: {
+        ...updatedVotes,
+        [selected]: updateValue,
+      },
     });
+
     setShowToast(true);
     setTimeout(() => setShowToast(false), 2500);
   };
 
   return (
     <div className="relative flex min-h-screen w-full flex-col bg-gray-50 dark:bg-background-dark">
-      <main className="flex  w-full flex-1 justify-center  sm:py-8 sm:px-6 lg:px-8">
-        <div className="flex flex-1 w-full   max-w-3xl flex-col gap-6">
-
+      <main className="flex w-full flex-1 justify-center sm:py-8 sm:px-6 lg:px-8">
+        <div className="flex flex-1 w-full max-w-3xl flex-col gap-6">
           {/* Poll Card */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -38,19 +69,17 @@ function VoteWrapper({ data }: {data: PollProps}) {
             transition={{ duration: 0.4 }}
             className="flex flex-col h-full flex-1 overflow-hidden sm:rounded-xl border border-gray-200 bg-white dark:bg-background-dark/80 dark:border-gray-800 shadow-sm"
           >
-
             {/* Header Image */}
             <div
               className="bg-cover bg-center flex flex-col rounded-b-2xl sm:rounded-none justify-end pt-[66px] sm:pt-[132px]"
               style={{
-                backgroundImage:
-                  `linear-gradient(0deg, rgba(0,0,0,0.4), rgba(0,0,0,0)),
-                  url("https://images.unsplash.com/photo-1517816428104-797678c7cf0c?w=1200")`
+                backgroundImage: `linear-gradient(0deg, rgba(0,0,0,0.4), rgba(0,0,0,0)),
+                url("https://images.unsplash.com/photo-1517816428104-797678c7cf0c?w=1200")`,
               }}
             >
               <div className="flex flex-col gap-1 p-6">
                 <h1 className="text-white text-2xl md:text-3xl font-bold">
-                    {data.title}
+                  {data.title}
                 </h1>
                 <p className="text-white/90 text-base">
                   Select one option to cast your vote.
@@ -73,7 +102,6 @@ function VoteWrapper({ data }: {data: PollProps}) {
             {/* Buttons */}
             <div className="border-t border-gray-200 dark:border-gray-800 p-6">
               <div className="flex flex-col gap-3 sm:flex-row">
-
                 {/* Vote Button */}
                 <button
                   onClick={handleVote}
@@ -97,22 +125,17 @@ function VoteWrapper({ data }: {data: PollProps}) {
                   <FiShare2 className="text-lg" />
                   Share
                 </button>
-
               </div>
             </div>
           </motion.div>
 
           {/* Toast */}
-          <AnimatePresence>
-            {showToast && <SuccessToast />}
-          </AnimatePresence>
-
+          <AnimatePresence>{showToast && <SuccessToast />}</AnimatePresence>
         </div>
       </main>
     </div>
   );
 }
-
 
 function PollOption({
   label,
@@ -125,17 +148,15 @@ function PollOption({
 }) {
   return (
     <motion.label
-      whileTap={{ scale: 0.98 }}
-      className={`group flex cursor-pointer items-center gap-4 rounded-lg border-2 p-4 transition
-      ${
+      whileTap={{ scale: 0.97 }}
+      className={`group flex cursor-pointer items-center gap-4 rounded-lg border-2 p-4 transition ${
         selected === label
-          ? "border-primary"
+          ? "border-primary bg-primary/5"
           : "border-gray-300 dark:border-gray-700"
       }`}
     >
       <input
         type="radio"
-        name="poll-framework"
         checked={selected === label}
         onChange={onSelect}
         className="h-5 w-5 appearance-none rounded-full border-2 border-gray-300
@@ -148,7 +169,6 @@ function PollOption({
   );
 }
 
-
 function SuccessToast() {
   return (
     <motion.div
@@ -160,10 +180,8 @@ function SuccessToast() {
     >
       <FiCheckCircle className="text-2xl" />
       <p className="text-sm font-medium">Your vote has been cast successfully!</p>
-    </motion.div>)
+    </motion.div>
+  );
 }
 
-
-
-
-export default VoteWrapper
+export default VoteWrapper;
